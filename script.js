@@ -47,26 +47,37 @@ function updateTable() {
     const table = document.getElementById('priceTable');
     table.innerHTML = '';
     
-    prices.forEach(price => {
+    prices.forEach((price, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${price.date}</td>
-            <td>${price.name}</td>
             <td>${price.price}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="deletePrice(${index})">Delete</button>
+            </td>
         `;
         table.appendChild(row);
     });
+}
+
+// Delete price entry
+function deletePrice(index) {
+    if (confirm('Are you sure you want to delete this price entry?')) {
+        prices.splice(index, 1);
+        localStorage.setItem('eggPrices', JSON.stringify(prices));
+        updateChart();
+        updateTable();
+    }
 }
 
 // Handle form submission
 document.getElementById('priceForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const name = document.getElementById('name').value;
     const price = parseFloat(document.getElementById('price').value);
     const date = new Date().toLocaleDateString();
     
-    prices.push({ date, name, price });
+    prices.push({ date, price });
     localStorage.setItem('eggPrices', JSON.stringify(prices));
     
     updateChart();
