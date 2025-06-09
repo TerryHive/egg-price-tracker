@@ -20,6 +20,10 @@
                     <div class="card-body">
                         <form id="priceForm">
                             <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="price" class="form-label">Price (NT$)</label>
                                 <input type="number" class="form-control" id="price" step="0.01" required>
                             </div>
@@ -51,14 +55,27 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Region</th>
                                 <th>Price (NT$)</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="priceTable">
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Statistics</h5>
+            </div>
+            <div class="card-body" id="statsBox">
+                <p>Number of entries: <span id="entryCount">0</span></p>
+                <p>Average price: <span id="avgPrice">0</span> NT$</p>
+                <p>Lowest price: <span id="minPrice">0</span> NT$ on <span id="minDate">-</span></p>
+                <p>Highest price: <span id="maxPrice">0</span> NT$ on <span id="maxDate">-</span></p>
+                <p>Change from yesterday: <span id="priceChange">0</span>%</p>
             </div>
         </div>
     </div>

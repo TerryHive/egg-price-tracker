@@ -60,6 +60,42 @@ function updateTable() {
     });
 }
 
+// Update statistics
+function updateStats() {
+    const entryCount = prices.length;
+    const avgPrice = prices.reduce((sum, p) => sum + p.price, 0) / entryCount;
+    const minPrice = Math.min(...prices.map(p => p.price));
+    const maxPrice = Math.max(...prices.map(p => p.price));
+    const minDate = prices.find(p => p.price === minPrice).date;
+    const maxDate = prices.find(p => p.price === maxPrice).date;
+    const priceChange = entryCount > 1 ? ((prices[entryCount - 1].price - prices[entryCount - 2].price) / prices[entryCount - 2].price) * 100 : 0;
+
+    document.getElementById('entryCount').textContent = entryCount;
+    document.getElementById('avgPrice').textContent = avgPrice.toFixed(2);
+    document.getElementById('minPrice').textContent = minPrice.toFixed(2);
+    document.getElementById('minDate').textContent = minDate;
+    document.getElementById('maxPrice').textContent = maxPrice.toFixed(2);
+    document.getElementById('maxDate').textContent = maxDate;
+    document.getElementById('priceChange').textContent = priceChange.toFixed(2);
+}
+
+// Handle form submission
+document.getElementById('priceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const date = document.getElementById('date').value;
+    const price = parseFloat(document.getElementById('price').value);
+    
+    prices.push({ date, price });
+    localStorage.setItem('eggPrices', JSON.stringify(prices));
+    
+    updateChart();
+    updateTable();
+    updateStats();
+    
+    this.reset();
+});
+
 // Delete price entry
 function deletePrice(index) {
     if (confirm('Are you sure you want to delete this price entry?')) {
@@ -67,29 +103,15 @@ function deletePrice(index) {
         localStorage.setItem('eggPrices', JSON.stringify(prices));
         updateChart();
         updateTable();
+        updateStats();
     }
 }
-
-// Handle form submission
-document.getElementById('priceForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const price = parseFloat(document.getElementById('price').value);
-    const date = new Date().toLocaleDateString();
-    
-    prices.push({ date, price });
-    localStorage.setItem('eggPrices', JSON.stringify(prices));
-    
-    updateChart();
-    updateTable();
-    
-    this.reset();
-});
 
 // Initialize the page
 function init() {
     initChart();
     updateTable();
+    updateStats();
 }
 
 // Call init when the page loads
